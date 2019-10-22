@@ -4,16 +4,15 @@ var app = express(),
     path = require('path'),
     publicDir = path.join(__dirname, 'public');
 const router = express.Router();
+var upload = require('./routes/upload')
+
 
 app.use(express.static(publicDir))
 
 
+app.use('/upload', upload);
+
 app.listen(port);
-//sample commit
-// Sample
-app.get('/sample', function (req, res) {
-    console.log("GET API /Sample called!");
-    res.status(200).send({message: "Got result from GET"});
-});
+
 
 module.exports = app;
