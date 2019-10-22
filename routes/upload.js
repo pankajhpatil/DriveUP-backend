@@ -50,7 +50,7 @@ router.post("/", upload.single("file"), function (req, res) {
                 s3_key: params.Key
             };
 
-            console.log(newFileUploaded);   
+            console.log(newFileUploaded);
 
         }
     });
