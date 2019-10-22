@@ -19,6 +19,7 @@ router.get('/', function (req, res) {
 router.post("/", upload.single("file"), function (req, res) {
     const file = req.file;
 
+    const s3FileURL = config.AWS_Uploaded_File_URL_LINK;
 
     let s3bucket = new AWS.S3({
         accessKeyId: config.AWS_ACCESS_KEY_ID,
