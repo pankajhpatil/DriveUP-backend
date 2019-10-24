@@ -333,12 +333,12 @@ router.post('/updateuser', function (req, res, next) {
 
 });
 
-router.get('/getuser', function (req, res) {
+router.post('/deleteuser', function (req, res, next) {
+    
 
-    console.log("INside /getuser" +  "withoutbody" +req.body+res.body+req.user_id);
+    var sqlQuery = "delete from `dropboxmysql`.`user_data`   WHERE (`username` = '" + req.body.username + "')";
 
-    var sqlQuery = "select * from user_data where user_id=req.body.user_id or username=req.body.username";
-
+    console.log(sqlQuery);
     
         mysql.fetchData(function (err, results) {
             if (err) {
@@ -346,8 +346,32 @@ router.get('/getuser', function (req, res) {
             }
             else {
 
-                console.log("Insert Complete");
-                res.statusMessage = "Insert Complete";
+                console.log("Record deleted Complete");
+                res.statusMessage = "Delete Complete";
+                res.status(200).send({result: results});
+
+            }
+        }, sqlQuery);
+    
+  
+
+});
+
+router.get('/fetchs3data', function (req, res) {
+
+    console.log("INside /getuser" +  "withoutbody" +req.body+res.body+req.user_id);
+
+    var sqlQuery = "select d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,f.filemodifieddate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid";
+    console.log(sqlQuery);
+    
+        mysql.fetchData(function (err, results) {
+            if (err) {
+                throw err;
+            }
+            else {
+
+                console.log("Fetch Complete for UI");
+                res.statusMessage = "Fetch Complete";
                 res.status(200).send({result: results});
 
             }
