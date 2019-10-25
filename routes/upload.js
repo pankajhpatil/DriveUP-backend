@@ -361,7 +361,7 @@ router.get('/fetchs3data', function (req, res) {
 
     console.log("INside /getuser" +  "withoutbody" +req.body+res.body+req.user_id);
 
-    var sqlQuery = "select d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,f.filemodifieddate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid";
+    var sqlQuery = "select d.username,d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,f.filemodifieddate,f.filecreatedate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid";
     console.log(sqlQuery);
     
         mysql.fetchData(function (err, results) {
@@ -373,6 +373,42 @@ router.get('/fetchs3data', function (req, res) {
                 console.log("Fetch Complete for UI");
                 res.statusMessage = "Fetch Complete";
                 res.status(200).send({result: results});
+
+            }
+        }, sqlQuery);
+    
+  
+
+});
+
+
+router.get('/userlogin', function (req, res) {
+
+    console.log("INside /getuser" +  "withoutbody" +req.body+res.body+req.user_id);
+    console.log(req.body);
+    //console.log(req);
+
+    var sqlQuery = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.body.username + "') and (`password` = '" + req.body.password + "')";
+    console.log(sqlQuery);
+    
+        mysql.fetchData(function (err, results) {
+            if (err) {
+                throw err;
+            }
+            else {
+                console.log(results.length);
+                if (results.length === 1) {
+                    req.session.email = req.body.email;
+                   // res.status(200);
+                    res.status(200).send({result: results});
+                }
+                else {
+                    res.status(403);
+                    res.send({msg: 'Invalid credentials'});
+                }
+                // console.log("Fetch Complete for UI");
+                // res.statusMessage = "Fetch Complete";
+                // res.status(200).send({result: results});
 
             }
         }, sqlQuery);
