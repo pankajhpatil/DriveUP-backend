@@ -127,5 +127,27 @@ router.get('/fetchs3data', function (req, res) {
 
 });
 
+router.get('/fetchallusers', function (req, res) {
+
+    var sqlQuery = "select * from dropboxmysql.user_data d where d.username <> 'admin'";
+
+    console.log(sqlQuery);
+
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
+
+            console.log("Fetch Complete for UI");
+            res.statusMessage = "Fetch Complete";
+            res.status(200).send({result: results});
+
+        }
+    }, sqlQuery);
+
+
+});
+
 
 module.exports = router;
