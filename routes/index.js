@@ -104,11 +104,10 @@ router.post('/register', function (req, res, next) {
 
 router.get('/fetchs3data', function (req, res) {
 
-
-    var sqlQuery = "select d.username,d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,f.filemodifieddate,f.filecreatedate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid WHERE (`username` = '" + req.session.username + "')";
+    var sqlQuery = "select d.username,d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,DATE_FORMAT(f.filecreatedate, '%d-%m-%Y %H:%i:%s') as filecreatedate,DATE_FORMAT(f.filemodifieddate, '%d-%m-%Y %H:%i:%s') filemodifieddate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid WHERE (`username` = '" + req.session.username + "')";
 
     if (req.session.username === "admin") {
-        sqlQuery = "select d.username,d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,f.filemodifieddate,f.filecreatedate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid";
+        sqlQuery = "select d.username,d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,DATE_FORMAT(f.filecreatedate, '%d-%m-%Y %H:%i:%s') as filecreatedate,DATE_FORMAT(f.filemodifieddate, '%d-%m-%Y %H:%i:%s') filemodifieddate,f.fileurl from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid";
     }
     console.log(sqlQuery);
 
