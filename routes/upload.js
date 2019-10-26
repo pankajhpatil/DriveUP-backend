@@ -19,8 +19,11 @@ router.get('/', function (req, res) {
 // POST to upload
 // upload file to s3 and log file details
 router.post("/", upload.single("file"), function (req, res) {
-    const moment = require('moment');    
     //File Upload started
+
+
+    // console.log("req2");
+    // console.log(req);
     var startDate = new Date();
 
     const file = req.file;
@@ -43,7 +46,6 @@ router.post("/", upload.single("file"), function (req, res) {
         ACL: "public-read"
     };
 
-    
 
     s3bucket.upload(params, function (err, data) {
         var cnt = "";
@@ -55,8 +57,8 @@ router.post("/", upload.single("file"), function (req, res) {
             res.send({data});
 
             //File Upload ended       
-            var endDate   = new Date();
-            console.log(`Difference in seconds:`+(endDate - startDate) / 1000);
+            var endDate = new Date();
+            console.log(`Difference in seconds:` + (endDate - startDate) / 1000);
             //insert in database
             var newFileUploaded = {
                 description: req.body.description,
@@ -67,74 +69,62 @@ router.post("/", upload.single("file"), function (req, res) {
 
             var sqlfetchQuery = "select count(*) as cnt from `dropboxmysql`.`user_files` where ( file_name = '" + file.originalname + "')";
             console.log(sqlfetchQuery);
-    //Number cnt = 0;
-        mysql.fetchData(function (err, results) {
-            if (err) {
-                console.log(err);
-                //throw err;
-            }
-            else {
-
-                console.log("fetch Complete");
-                console.log(results);
-                console.log(results[0].cnt);
-                cnt=results[0].cnt;
-                console.log(cnt);
-                
-                if(Number(cnt) > 0){
-                    //update data
-                    var sqlupdateQuery = "UPDATE `dropboxmysql`.`user_files` SET `fileuploadtime` = '"+((endDate - startDate) / 1000)+"', `filemodifieddate` = now() ,`filedesc` = 'File Updated' WHERE (`file_name` = '"+ file.originalname + "')";
-                    console.log(sqlupdateQuery);
-            
-                mysql.fetchData(function (err, results) {
-                    if (err) {
-                        console.log(err);
-                        //throw err;
-                    }
-                    else {
-        
-                        console.log("update Complete");
-                       // res.statusMessage = "Insert Complete";
-                       // res.status(200).send({result: results});
-        
-                    }
-                }, sqlupdateQuery);
-    
-    
-            }
-            else{
-                //insert data
-                var sqlinsertQuery = "INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`,`filedesc`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('" + "1" + "','" + file.originalname + "','" + file.originalname + "', '" + ((endDate - startDate) / 1000) + "', " + "now()" + ", " + "now()" + ", '" + s3FileURL + file.originalname + "')";
-                console.log(sqlinsertQuery);
-        
+            //Number cnt = 0;
             mysql.fetchData(function (err, results) {
                 if (err) {
                     console.log(err);
                     //throw err;
                 }
                 else {
-    
-                    console.log("Insert Complete");
-                   // res.statusMessage = "Insert Complete";
-                   // res.status(200).send({result: results});
-    
+
+                    console.log("fetch Complete");
+                    console.log(results);
+                    console.log(results[0].cnt);
+                    cnt = results[0].cnt;
+                    console.log(cnt);
+
+                    if (Number(cnt) > 0) {
+                        //update data
+                        var sqlupdateQuery = "UPDATE `dropboxmysql`.`user_files` SET `fileuploadtime` = '" + ((endDate - startDate) / 1000) + "', `filemodifieddate` = now() ,`filedesc` = 'File Updated' WHERE (`file_name` = '" + file.originalname + "')";
+                        console.log(sqlupdateQuery);
+
+                        mysql.fetchData(function (err, results) {
+                            if (err) {
+                                console.log(err);
+                                //throw err;
+                            }
+                            else {
+
+                                console.log("update Complete");
+
+
+                            }
+                        }, sqlupdateQuery);
+
+
+                    }
+                    else {
+                        //insert data
+                        var sqlinsertQuery = "INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`,`filedesc`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('" + req.session.user_id + "','" + file.originalname + "','" + req.body.description + "', '" + ((endDate - startDate) / 1000) + "', " + "now()" + ", " + "now()" + ", '" + s3FileURL + file.originalname + "')";
+                        console.log(sqlinsertQuery);
+
+                        mysql.fetchData(function (err, results) {
+                            if (err) {
+                                console.log(err);
+                                // throw err;
+                            }
+                            else {
+
+                                console.log("Insert Complete");
+
+                            }
+                        }, sqlinsertQuery);
+                    }
+
+
                 }
-            }, sqlinsertQuery);
-        }
+            }, sqlfetchQuery);
 
-               // res.statusMessage = "Insert Complete";
-               // res.status(200).send({result: results});
-
-            }
-        }, sqlfetchQuery);
-
-
-
-
-    
-         //   INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('1', '283_01.pdf', 0.023, now(), now(), 'https://cmpe281dropboxfiles.s3.us-west-1.amazonaws.com/283_01.pdf');
-
-          //  console.log(newFileUploaded);
 
         }
     });
@@ -144,7 +134,7 @@ router.post("/", upload.single("file"), function (req, res) {
 // POST to delete
 // delete from s3 bucket
 router.post("/delete", upload.single("file"), function (req, res) {
-console.log("deleting from s3 bucket");
+    console.log("deleting from s3 bucket");
     //File Upload started
     var startDate = new Date();
 
@@ -176,8 +166,8 @@ console.log("deleting from s3 bucket");
             //success
             res.send({data});
             //File Upload ended       
-            var endDate   = new Date();
-            console.log(`Difference in seconds:`+(endDate - startDate) / 1000);
+            var endDate = new Date();
+            console.log(`Difference in seconds:` + (endDate - startDate) / 1000);
             //insert in database
             var newFileUploaded = {
                 description: req.body.description,
@@ -188,33 +178,26 @@ console.log("deleting from s3 bucket");
 
             var sqldeleteQuery = "    DELETE FROM `dropboxmysql`.`user_files` WHERE (`file_name` = '" + file.originalname + "')";
             console.log(sqldeleteQuery);
-    //Number cnt = 0;
-        mysql.fetchData(function (err, results) {
-            if (err) {
-                console.log(err);
-                //throw err;
-            }
-            else {
+            //Number cnt = 0;
+            mysql.fetchData(function (err, results) {
+                if (err) {
+                    console.log(err);
+                    //throw err;
+                }
+                else {
 
-                console.log("delete Complete");
-                console.log(results);
-            }
-        }, sqldeleteQuery);
-
-
+                    console.log("delete Complete");
+                    console.log(results);
+                }
+            }, sqldeleteQuery);
 
 
-    
-         //   INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('1', '283_01.pdf', 0.023, now(), now(), 'https://cmpe281dropboxfiles.s3.us-west-1.amazonaws.com/283_01.pdf');
+            //   INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('1', '283_01.pdf', 0.023, now(), now(), 'https://cmpe281dropboxfiles.s3.us-west-1.amazonaws.com/283_01.pdf');
 
-          //  console.log(newFileUploaded);
+            //  console.log(newFileUploaded);
 
         }
     });
-
-
-
-
 
 
 });
@@ -223,29 +206,27 @@ console.log("deleting from s3 bucket");
 router.get('/test', function (req, res) {
 
     console.log("INside /test");
-    var a =Number('1');
+    var a = Number('1');
     console.log(a === 1);
     console.log(Number('1') === 1);
-console.log(Number('1') > 0);
+    console.log(Number('1') > 0);
 
     var sqlQuery = "SELECT * from user_data";
 
 
-    
-        mysql.fetchData(function (err, results) {
-            if (err) {
-                throw err;
-            }
-            else {
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
 
-                console.log("Fetch Project Details Successful!");
-                res.statusMessage = "Data fetched";
-                res.status(200).send({result: results});
+            console.log("Fetch Project Details Successful!");
+            res.statusMessage = "Data fetched";
+            res.status(200).send({result: results});
 
-            }
-        }, sqlQuery);
-    
-  
+        }
+    }, sqlQuery);
+
 
 });
 
@@ -255,51 +236,49 @@ router.post('/updateuser', function (req, res, next) {
     // console.log(user_id);
     // console.log("INside /insert" +  "withoutbody" +req.body);
     console.log(req.body);
-    console.log("full request "+req);
+    console.log("full request " + req);
     console.log(req);
 
     var sqlQuery = "UPDATE `dropboxmysql`.`user_data` SET `password` = '" + req.body.password + "',`firstname` = '" + req.body.firstname + "',`lastname` = '" + req.body.lastname + "',`email` = '" + req.body.email + "',`phone`= '" + req.body.phone + "',`modifieddate`=now()  WHERE (`username` = '" + req.body.username + "')";
 
     console.log(sqlQuery);
-    
-        mysql.fetchData(function (err, results) {
-            if (err) {
-                throw err;
-            }
-            else {
 
-                console.log("Insert Complete");
-                res.statusMessage = "Insert Complete";
-                res.status(200).send({result: results});
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
 
-            }
-        }, sqlQuery);
-    
-  
+            console.log("Insert Complete");
+            res.statusMessage = "Insert Complete";
+            res.status(200).send({result: results});
+
+        }
+    }, sqlQuery);
+
 
 });
 
 router.post('/deleteuser', function (req, res, next) {
-    
+
 
     var sqlQuery = "delete from `dropboxmysql`.`user_data`   WHERE (`username` = '" + req.body.username + "')";
 
     console.log(sqlQuery);
-    
-        mysql.fetchData(function (err, results) {
-            if (err) {
-                throw err;
-            }
-            else {
 
-                console.log("Record deleted Complete");
-                res.statusMessage = "Delete Complete";
-                res.status(200).send({result: results});
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
 
-            }
-        }, sqlQuery);
-    
-  
+            console.log("Record deleted Complete");
+            res.statusMessage = "Delete Complete";
+            res.status(200).send({result: results});
+
+        }
+    }, sqlQuery);
+
 
 });
 
