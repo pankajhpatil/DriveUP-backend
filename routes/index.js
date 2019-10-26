@@ -150,4 +150,20 @@ router.get('/fetchallusers', function (req, res) {
 });
 
 
+router.get('/logout', function (req, res) {
+
+    if (req.session.username) {
+        req.session.destroy();
+        res.status(200);
+        res.send({msg: 'User logged out Successfully'});
+    }
+    else {
+        res.status(403);
+        res.send({msg: 'No user is logged in'});
+    }
+
+
+});
+
+
 module.exports = router;
