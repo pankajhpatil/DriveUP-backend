@@ -133,14 +133,8 @@ router.post("/", upload.single("file"), function (req, res) {
 
 // POST to delete
 // delete from s3 bucket
-router.post("/delete", upload.single("file"), function (req, res) {
-    console.log("deleting from s3 bucket");
-    //File Upload started
-    var startDate = new Date();
+router.post("/delete", function (req, res) {
 
-    const file = req.file;
-
-    const s3FileURL = config.AWS_Uploaded_File_URL_LINK;
 
     let s3bucket = new AWS.S3({
         accessKeyId: config.AWS_ACCESS_KEY_ID,
@@ -152,33 +146,18 @@ router.post("/delete", upload.single("file"), function (req, res) {
 
     var params = {
         Bucket: config.AWS_BUCKET_NAME,
-        Key: file.originalname
+        Key: req.body.fileName,
     };
 
-    s3bucket.deleteObject
 
     s3bucket.deleteObject(params, function (err, data) {
-        var cnt = "";
 
         if (err) {
             res.status(500).json({error: true, Message: err});
         } else {
-            //success
-            res.send({data});
-            //File Upload ended       
-            var endDate = new Date();
-            console.log(`Difference in seconds:` + (endDate - startDate) / 1000);
-            //insert in database
-            var newFileUploaded = {
-                description: req.body.description,
-                fileLink: s3FileURL + file.originalname,
-                s3_key: params.Key
-            };
-            //delete from user_files
 
-            var sqldeleteQuery = "    DELETE FROM `dropboxmysql`.`user_files` WHERE (`file_name` = '" + file.originalname + "')";
-            console.log(sqldeleteQuery);
-            //Number cnt = 0;
+            var sqldeleteQuery = "    DELETE FROM `dropboxmysql`.`user_files` WHERE (`file_name` = '" + req.body.fileName + "')";
+
             mysql.fetchData(function (err, results) {
                 if (err) {
                     console.log(err);
@@ -186,15 +165,9 @@ router.post("/delete", upload.single("file"), function (req, res) {
                 }
                 else {
 
-                    console.log("delete Complete");
-                    console.log(results);
+                    res.send({data});
                 }
             }, sqldeleteQuery);
-
-
-            //   INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('1', '283_01.pdf', 0.023, now(), now(), 'https://cmpe281dropboxfiles.s3.us-west-1.amazonaws.com/283_01.pdf');
-
-            //  console.log(newFileUploaded);
 
         }
     });
