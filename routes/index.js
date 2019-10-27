@@ -165,5 +165,41 @@ router.get('/logout', function (req, res) {
 
 });
 
+router.post('/login/OAuth', function (req, res) {
+
+    console.log("Inside /login/OAuth");
+    console.log(req.body);
+
+    var sqlQuery = "select * from dropboxmysql.user_data d WHERE `email` = '" + req.body.email + "'";
+    console.log(sqlQuery);
+
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
+            console.log(results.length);
+            console.log(results[0]);
+            if (results.length === 1) {
+                req.session.username = req.body.email;
+                // if email and username both are diff in DB use the commented part`~`
+                // req.session.username = results[0].username;
+                req.session.firstName = results[0].firstname;
+                req.session.lastName = results[0].lastname;
+                req.session.user_id = results[0].user_id;
+                // res.status(200);
+                res.status(200).send({result: results});
+            }
+            else {
+                res.status(403);
+                res.send({msg: 'Invalid credentials'});
+            }
+
+
+        }
+    }, sqlQuery);
+
+
+});
 
 module.exports = router;
