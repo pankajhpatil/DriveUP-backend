@@ -165,5 +165,70 @@ router.get('/logout', function (req, res) {
 
 });
 
+router.post('/login/OAuth', function (req, res) {
+
+    console.log("Inside /login/OAuth");
+    console.log(req.body);
+
+    var sqlQuery = "select * from dropboxmysql.user_data d WHERE `email` = '" + req.body.email + "'";
+    console.log(sqlQuery);
+
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
+            // New User
+            if(results.length === 0) {
+                console.log("user not present continue to insert");
+                var insertQuery = "INSERT INTO `user_data` ( `username`, `password`, `firstname`, `lastname`,`email`,`modifieddate`,`phone`) VALUES ('" + 
+                                        req.body.username + "', '" + req.body.password + "', '" + req.body.firstname + "', '" + 
+                                        req.body.lastname + "', '" + req.body.email + "', " + "now()" + ", '" + req.body.phone + "')";
+                mysql.fetchData(function (err, insertResults) {
+                    console.log('Results inside:: ');
+                    console.log(insertResults.length);
+                    console.log(insertResults[0]);                    
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        console.log("Insert Complete");
+                        var sqlQueryAgain = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.body.username + "')";
+                        console.log(sqlQueryAgain);
+                    
+                        mysql.fetchData(function (err, resultsAgain) {
+                            if (err) {
+                                throw err;
+                            }
+                            else {
+                                console.log(resultsAgain.length);
+                                console.log(resultsAgain[0]);
+                                if (resultsAgain.length === 1) {
+                                    req.session.username = req.body.username;
+                                    req.session.firstName = resultsAgain[0].firstname;
+                                    req.session.lastName = resultsAgain[0].lastname;
+                                    req.session.user_id = resultsAgain[0].user_id;
+
+                                    res.statusMessage = "Insert Complete";
+                                    res.status(200).send({result: resultsAgain});
+                                }
+                                else {
+                                    res.status(403);
+                                    res.send({msg: 'Invalid credentials'});
+                                }
+                            }
+                        }, sqlQueryAgain);
+                    }
+                }, insertQuery);
+            } else {
+                req.session.username = req.body.username;
+                req.session.firstName = req.body.firstname;
+                req.session.lastName = req.body.lastname;
+                req.session.user_id = results[0].user_id;
+                res.status(200).send({result: results}); 
+            }                   
+        }
+    }, sqlQuery);
+});
 
 module.exports = router;
