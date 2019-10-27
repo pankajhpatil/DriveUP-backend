@@ -178,28 +178,32 @@ router.post('/login/OAuth', function (req, res) {
             throw err;
         }
         else {
-            console.log(results.length);
-            console.log(results[0]);
-            if (results.length === 1) {
-                req.session.username = req.body.email;
-                // if email and username both are diff in DB use the commented part`~`
-                // req.session.username = results[0].username;
-                req.session.firstName = results[0].firstname;
-                req.session.lastName = results[0].lastname;
-                req.session.user_id = results[0].user_id;
-                // res.status(200);
-                res.status(200).send({result: results});
-            }
-            else {
-                res.status(403);
-                res.send({msg: 'Invalid credentials'});
-            }
-
-
+            // New User
+            if(results.length === 0) {
+                console.log("user not present continue to insert");
+                var insertQuery = "INSERT INTO `user_data` ( `username`, `password`, `firstname`, `lastname`,`email`,`modifieddate`,`phone`) VALUES ('" + 
+                                        req.body.username + "', '" + req.body.password + "', '" + req.body.firstname + "', '" + 
+                                        req.body.lastname + "', '" + req.body.email + "', " + "now()" + ", '" + req.body.phone + "')";
+                mysql.fetchData(function (err, insertResults) {
+                    console.log('Results inside:: ');
+                    console.log(insertResults.length);
+                    console.log(insertResults[0]);                    
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        console.log("Insert Complete");
+                        res.statusMessage = "Insert Complete";
+                        req.session.username = req.body.username;
+                        req.session.firstName = req.body.firstname;
+                        req.session.lastName = req.body.lastname;
+                        req.session.user_id = results.length === 0? 'New User' : results[0].user_id;
+                        res.status(200).send({result: results});
+                    }
+                }, insertQuery);
+            }        
         }
     }, sqlQuery);
-
-
 });
 
 module.exports = router;
