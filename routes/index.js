@@ -169,7 +169,7 @@ router.post('/login/OAuth', function (req, res) {
 
     console.log("Inside /login/OAuth");
     console.log(req.body);
-
+    //check if user data is available
     var sqlQuery = "select * from dropboxmysql.user_data d WHERE `email` = '" + req.body.email + "'";
     console.log(sqlQuery);
 
