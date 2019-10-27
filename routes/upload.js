@@ -54,6 +54,11 @@ router.post("/", upload.single("file"), function (req, res) {
             res.status(500).json({error: true, Message: err});
         } else {
             //success
+            var url=data.Location;
+            url = url.replace('https://cmpe281dropboxfiles.s3.us-west-1.amazonaws.com', 'https://d2jq6vuif68y2f.cloudfront.net');
+console.log(url);
+
+            console.log(data.Location);
             res.send({data});
 
             //File Upload ended       
@@ -105,7 +110,7 @@ router.post("/", upload.single("file"), function (req, res) {
                     }
                     else {
                         //insert data
-                        var sqlinsertQuery = "INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`,`filedesc`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('" + req.session.user_id + "','" + file.originalname + "','" + req.body.description + "', '" + ((endDate - startDate) / 1000) + "', " + "now()" + ", " + "now()" + ", '" + s3FileURL + file.originalname + "')";
+                        var sqlinsertQuery = "INSERT INTO `dropboxmysql`.`user_files` (`userid`, `file_name`,`filedesc`, `fileuploadtime`, `filemodifieddate`, `filecreatedate`, `fileurl`) VALUES ('" + req.session.user_id + "','" + file.originalname + "','" + req.body.description + "', '" + ((endDate - startDate) / 1000) + "', " + "now()" + ", " + "now()" + ", '" + url + "')";
                         console.log(sqlinsertQuery);
 
                         mysql.fetchData(function (err, results) {

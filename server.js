@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 app.use(cors(
     {
-        origin: ['http://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://localhost:3001','http://localhost:3001', 'http://10.0.0.137:3000', 'http://10.0.0.188:3000', 'https://10.0.0.137:3000', 'https://10.0.0.188:3000'],
+        origin: ['http://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://localhost:3001','http://localhost:3001', 'http://10.0.0.137:3000', 'http://10.0.0.188:3000', 'https://10.0.0.137:3000', 'https://10.0.0.188:3000','http://www.pankajhpatil.com/','https://www.pankajhpatil.com/'],
         credentials: true,
     }
 ));
