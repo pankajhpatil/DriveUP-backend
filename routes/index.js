@@ -193,15 +193,40 @@ router.post('/login/OAuth', function (req, res) {
                     }
                     else {
                         console.log("Insert Complete");
-                        res.statusMessage = "Insert Complete";
-                        req.session.username = req.body.username;
-                        req.session.firstName = req.body.firstname;
-                        req.session.lastName = req.body.lastname;
-                        req.session.user_id = results.length === 0? 'New User' : results[0].user_id;
-                        res.status(200).send({result: results});
+                        var sqlQueryAgain = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.body.username + "')";
+                        console.log(sqlQueryAgain);
+                    
+                        mysql.fetchData(function (err, resultsAgain) {
+                            if (err) {
+                                throw err;
+                            }
+                            else {
+                                console.log(resultsAgain.length);
+                                console.log(resultsAgain[0]);
+                                if (resultsAgain.length === 1) {
+                                    req.session.username = req.body.username;
+                                    req.session.firstName = resultsAgain[0].firstname;
+                                    req.session.lastName = resultsAgain[0].lastname;
+                                    req.session.user_id = resultsAgain[0].user_id;
+
+                                    res.statusMessage = "Insert Complete";
+                                    res.status(200).send({result: resultsAgain});
+                                }
+                                else {
+                                    res.status(403);
+                                    res.send({msg: 'Invalid credentials'});
+                                }
+                            }
+                        }, sqlQueryAgain);
                     }
                 }, insertQuery);
-            }        
+            } else {
+                req.session.username = req.body.username;
+                req.session.firstName = req.body.firstname;
+                req.session.lastName = req.body.lastname;
+                req.session.user_id = results[0].user_id;
+                res.status(200).send({result: results}); 
+            }                   
         }
     }, sqlQuery);
 });
