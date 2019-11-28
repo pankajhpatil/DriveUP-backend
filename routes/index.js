@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const config = require("../config");
 var mysql = require('./db/sql');
+const Student = require('./Models/StudentDetails');
 
 
 router.post('/login', function (req, res) {
@@ -62,8 +63,6 @@ router.post('/register', function (req, res, next) {
 
     var sqlselectQuery = "select count(*) as cnt from `user_data` where ( `username` = '" + req.body.username + "')";
 
-    console.log(sqlselectQuery);
-
     mysql.fetchData(function (err, results) {
         if (err) {
             console.log(err);
@@ -78,8 +77,6 @@ router.post('/register', function (req, res, next) {
             } else {
                 console.log("user not present continue to insert");
                 var sqlQuery = "INSERT INTO `user_data` ( `username`, `password`, `firstname`, `lastname`,`email`,`modifieddate`,`phone`,`usertype`) VALUES ('" + req.body.username + "', '" + req.body.password + "', '" + req.body.firstname + "', '" + req.body.lastname + "', '" + req.body.email + "', " + "now()" + ", '" + req.body.phone + "', '" + req.body.usertype + "')";
-
-                console.log(sqlQuery);
 
                 mysql.fetchData(function (err, results) {
                     if (err) {
@@ -110,7 +107,6 @@ router.get('/fetchs3data', function (req, res) {
     if (req.session.username === "admin") {
         sqlQuery = "select d.username,d.firstname,d.lastname,f.file_name,f.filedesc,f.fileuploadtime,DATE_FORMAT(f.filecreatedate, '%d-%m-%Y %H:%i:%s') as filecreatedate,DATE_FORMAT(f.filemodifieddate, '%d-%m-%Y %H:%i:%s') filemodifieddate,f.fileurl,d.usertype from dropboxmysql.user_files f join dropboxmysql.user_data d on d.user_id=f.userid";
     }
-    console.log(sqlQuery);
 
     mysql.fetchData(function (err, results) {
         if (err) {
@@ -168,11 +164,8 @@ router.get('/logout', function (req, res) {
 
 router.post('/login/OAuth', function (req, res) {
 
-    console.log("Inside /login/OAuth");
-    console.log(req.body);
     //check if user data is available
     var sqlQuery = "select * from dropboxmysql.user_data d WHERE `username` = '" + req.body.email + "'";
-    console.log(sqlQuery);
 
     mysql.fetchData(function (err, results) {
         if (err) {
@@ -235,10 +228,47 @@ router.post('/login/OAuth', function (req, res) {
 //Manish
 router.post('/enroll', function (req, res) {
 
-    console.log('Manish'+req.session.username);
-    console.log('Manish'+req.body.dob);
+    var name=req.session.username;
 
+    Student.findOne({ Name:name })
+        .then(student => {
+            
+            if(student){
+                     Student.update({_id:student._id}, {
+                        Name: name,
+                        Minor : req.body.minor,
+                        Address: req.body.address,
+                        Country : req.body.country,
+                        PhoneNumber : req.body.phone,
+                        Gender : req.body.gender,
+                        DOB : req.body.dob.substring(0,10)
+                     })
+                     .then(student => {
+                        console.log("Student details updates successfully");
+                        res.status(200).send();
+                    })
+                    .catch(err=>console.log(err));
+            }else{
+            
+                const newStudent = new Student({
 
+                    Name: name,
+                    Minor : req.body.minor,
+                    Address: req.body.address,
+                    Country : req.body.country,
+                    PhoneNumber : req.body.phone,
+                    Gender : req.body.gender,
+                    DOB : req.body.dob.substring(0,10)
+                });
+
+                newStudent.save()
+                .then(student => {
+                    console.log("Student details saved successfully");
+                    res.status(200).send();
+                })
+                .catch(err=>console.log(err));
+            }
+        })
 });
 
 module.exports = router;
