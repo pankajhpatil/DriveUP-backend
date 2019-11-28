@@ -231,4 +231,13 @@ router.post('/login/OAuth', function (req, res) {
     }, sqlQuery);
 });
 
+//Manish
+router.post('/enroll', function (req, res) {
+
+    console.log('Manish'+req.session.username);
+    console.log('Manish'+req.body.dob);
+
+
+});
+
 module.exports = router;
