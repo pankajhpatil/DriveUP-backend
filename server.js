@@ -7,11 +7,12 @@ const router = express.Router();
 var upload = require('./routes/upload')
 var download = require('./routes/fetch')
 var index = require('./routes/index')
+var instructor = require('./routes/instructor')
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var session = require('express-session')
-
+const mongoose=require('mongoose');
 
 app.use(express.static(publicDir))
 
@@ -22,6 +23,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.use(cookieParser());
+
+//DB config
+const db=require('./routes/Models/keys').MongoURI;
+
+//connect to Mongo
+mongoose.connect(db,{ useNewUrlParser: true})
+.then(()=>console.log('MongoDb connected!!'))
+.catch(err=>console.log(err));
 
 app.use(cors(
     {
@@ -42,6 +51,7 @@ app.use(session({
 app.use('/upload', upload);
 app.use('/download', download);
 app.use('/', index);
+app.use('/instructor', instructor);
 
 app.listen(port);
 

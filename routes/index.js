@@ -24,6 +24,7 @@ router.post('/login', function (req, res) {
                 req.session.firstName = results[0].firstname;
                 req.session.lastName = results[0].lastname;
                 req.session.user_id = results[0].user_id;
+                req.session.usertype = results[0].usertype;
                 // res.status(200);
                 res.status(200).send({result: results});
             }
