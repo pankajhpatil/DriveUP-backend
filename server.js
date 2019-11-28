@@ -12,7 +12,7 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var session = require('express-session')
-
+const mongoose=require('mongoose');
 
 app.use(express.static(publicDir))
 
@@ -23,6 +23,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.use(cookieParser());
+
+//DB config
+const db=require('./routes/Models/keys').MongoURI;
+
+//connect to Mongo
+mongoose.connect(db,{ useNewUrlParser: true})
+.then(()=>console.log('MongoDb connected!!'))
+.catch(err=>console.log(err));
 
 app.use(cors(
     {

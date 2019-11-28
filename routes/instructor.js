@@ -5,6 +5,8 @@ const multer = require("multer");
 const config = require("../config");
 var mysql = require('./db/sql');
 var moment = require('moment');
+const instructorSchedule= require('./Models/instructorSchedule');
+
 
 
 var storage = multer.memoryStorage();
@@ -24,10 +26,32 @@ router.get('/', function (req, res) {
     console.log(later.format("DD-MM-YYYY"));
     console.log(later.diff(now,"days"));
     for(var i=0; i<=later.diff(now,"days"); i++){
-        console.log(now.format("DD-MM-YYYY"));
+        //console.log(now.format("DD-MM-YYYY"));
         now = moment(now, "DD-MM-YYYY").add(1, 'days');
 
     }
+     //mongo
+     const ISchedule = new instructorSchedule({
+        instructorID : 2,
+        sdate : now,
+        slot0810:"Y",
+        slot1012:"Y",
+        slot1214:"Y",
+        slot1416:"Y",
+        slot1618:"Y",
+        slot1820:"Y",
+        slot2022:"N"
+      });
+      console.log('%%%%%%%');
+      console.log(ISchedule);
+      //check if already exisits
+      ISchedule.save()
+      .then(user => {
+          console.log('Schedule registered in Mongo');
+      })
+      .catch(err=>console.log(err));
+
+      //{"_id":{"$oid":"5ddf7d6e1c9d440000467c4e"},"instructorID":"1","sdate":{"$date":{"$numberLong":"1573459200000"}},"slot0810":"Y","slot1012":"Y","slot1214":"Y","slot1416":"Y","slot1618":"Y","slot1820":"Y","slot2022":"Y"}
         res.status(200).send({message: "Got result from GET"});
 });
 
