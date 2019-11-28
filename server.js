@@ -7,6 +7,7 @@ const router = express.Router();
 var upload = require('./routes/upload')
 var download = require('./routes/fetch')
 var index = require('./routes/index')
+var instructor = require('./routes/instructor')
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var bodyParser = require('body-parser');
@@ -42,6 +43,7 @@ app.use(session({
 app.use('/upload', upload);
 app.use('/download', download);
 app.use('/', index);
+app.use('/instructor', instructor);
 
 app.listen(port);
 
