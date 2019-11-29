@@ -26,6 +26,10 @@ const StudentSchema=new mongoose.Schema({
         type: String,
         required: true
     },
+    City: {
+        type: String,
+        required: true
+    },
     DOB: {
         type: String,
         required: true

@@ -274,6 +274,7 @@ router.post('/home/enroll', function (req, res) {
                         Country : req.body.country,
                         PhoneNumber : req.body.phone,
                         Gender : req.body.gender,
+                        City:req.body.city,
                         DOB : req.body.dob.substring(0,10)
                      })
                      .then(student => {
@@ -291,6 +292,7 @@ router.post('/home/enroll', function (req, res) {
                     Country : req.body.country,
                     PhoneNumber : req.body.phone,
                     Gender : req.body.gender,
+                    City:req.body.city,
                     DOB : req.body.dob.substring(0,10)
                 });
 
