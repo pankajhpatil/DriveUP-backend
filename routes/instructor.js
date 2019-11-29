@@ -27,47 +27,47 @@ instructorschedule.find({ iusername : name },(err, data) => {
 
 
 // GET to upload
-router.get('/', function (req, res) {
-    console.log("insert instructor schedules!");
+router.post('/createinstructorSchedule', function (req, res) {
+    console.log("insert instructor schedules!",req.session.username);
     var username=req.session.username;
-    username="test22";
-    var now = moment();
-    var later = moment(now, "DD-MM-YYYY").add(7, 'days');
+    //username="test22";
+    var now = moment(req.body.fromdate);
+    var later = moment(req.body.todate);
+//console.log(req.body.fromdate);
+//console.log(now);
+//console.log(req.body.slot0810);
+//console.log(later);
+var cnt=(later.diff(now,"days")+1);
 
-    var sDate=now.format("DD-MM-YYYY");
-    var eDate=later.format("DD-MM-YYYY");
-
-    console.log(now.format("DD-MM-YYYY"));
-    console.log(later.format("DD-MM-YYYY"));
-    console.log(later.diff(now,"days"));
-    for(var i=0; i<=later.diff(now,"days"); i++){
+    for(var i=0; i<=cnt; i++){
         //console.log(now.format("DD-MM-YYYY"));
           //mongo
      const ISchedule = new instructorschedule({
         iusername : username,
         sdate : now.format("DD-MMM-YYYY"),
-        slot0810:"Y",
-        slot1012:"Y",
-        slot1214:"N",
-        slot1416:"N",
-        slot1618:"Y",
-        slot1820:"Y",
-        slot2022:"N"
+        slot0810:req.body.slot0810,
+        slot1012:req.body.slot1012,
+        slot1214:req.body.slot1214,
+        slot1416:req.body.slot1416,
+        slot1618:req.body.slot1618,
+        slot1820:req.body.slot1820,
+        slot2022:req.body.slot2022
       });
-      console.log('%%%%%%%');
-      console.log(ISchedule);
+      //console.log('%%%%%%%');
+      //console.log(ISchedule);
       //check if already exisits
       ISchedule.save()
       .then(user => {
           console.log('Schedule registered in Mongo');
       })
       .catch(err=>console.log(err));
-
+     //console.log(now.format("DD-MMM-YYYY"));
     now = moment(now, "DD-MM-YYYY").add(1, 'days');
     }
    
 
       //{"_id":{"$oid":"5ddf7d6e1c9d440000467c4e"},"instructorID":"1","sdate":{"$date":{"$numberLong":"1573459200000"}},"slot0810":"Y","slot1012":"Y","slot1214":"Y","slot1416":"Y","slot1618":"Y","slot1820":"Y","slot2022":"Y"}
+      res.statusMessage = "Schedule Created";      
         res.status(200).send({message: "Got result from GET"});
 });
 
