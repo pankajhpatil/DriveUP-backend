@@ -7,19 +7,19 @@ const Student = require('./Models/StudentDetails');
 
 router.post('/login', function (req, res) {
 
-    console.log("INside /getuser" + "withoutbody" + req.body + res.body + req.user_id);
-    console.log(req.body);
+    // console.log("INside /getuser" + "withoutbody" + req.body + res.body + req.user_id);
+    // console.log(req.body);
 
     var sqlQuery = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.body.username + "') and (`password` = '" + req.body.password + "')";
-    console.log(sqlQuery);
+    // console.log(sqlQuery);
 
     mysql.fetchData(function (err, results) {
         if (err) {
             throw err;
         }
         else {
-            console.log(results.length);
-            console.log(results[0]);
+            // console.log(results.length);
+            // console.log(results[0]);
             if (results.length === 1) {
                 req.session.username = req.body.username;
                 req.session.firstName = results[0].firstname;
@@ -44,7 +44,7 @@ router.post('/login', function (req, res) {
 
 router.get('/checkLogin', function (req, res) {
 
-    console.log(req.session.username);
+    // console.log(req.session.username);
 
     if (req.session.username && req.session.username !== "") {
         res.status(200).send({loggedInUser: req.session});
@@ -226,7 +226,40 @@ router.post('/login/OAuth', function (req, res) {
 });
 
 //Manish
-router.post('/enroll', function (req, res) {
+//check profile is complete?
+router.get('/home/enroll', function (req, res) {
+    
+    var name=req.session.username;
+
+    Student.findOne({ Name:name })
+        .then(student => {
+            
+            if(student){
+                console.log("Profile is already completed");
+
+                // data = {};
+                
+                // req.session.minor = student.Minor;
+                // req.session.address = student.Address;
+                // req.session.country = student.Country;
+                // req.session.phone = student.PhoneNumber;
+                // req.session.gender = student.Gender;
+                // req.session.dob = student.DOB;
+                // req.session.profileStatus = 'completed';
+
+                res.status(200).send({student:student});
+            }
+            else{
+                console.log("Profile is not completed");
+                req.session.profileStatus = 'incomplete';
+                res.status(200).send();
+            }
+            
+        })
+});
+
+//enroll form submission
+router.post('/home/enroll', function (req, res) {
 
     var name=req.session.username;
 
