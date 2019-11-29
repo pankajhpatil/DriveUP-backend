@@ -33,6 +33,18 @@ const StudentSchema=new mongoose.Schema({
     DOB: {
         type: String,
         required: true
+    },
+    ctype: {
+        type: String,
+        required: false
+    },
+    dualcontrol: {
+        type: String,
+        required: false
+    },
+    ilicence: {
+        type: String,
+        required: false
     }
     
 });

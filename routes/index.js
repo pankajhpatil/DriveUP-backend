@@ -41,6 +41,34 @@ router.post('/login', function (req, res) {
 
 });
 
+router.get('/getloggedInUserData', function (req, res) {
+
+    var sqlQuery = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.session.username + "')";
+    // console.log(sqlQuery);
+
+    mysql.fetchData(function (err, results) {
+        if (err) {
+            throw err;
+        }
+        else {
+            //console.log(results);
+            
+            if (results.length === 1) {
+                
+                res.status(200).send({result: results});
+            }
+            else {
+                res.status(403);
+                res.send({msg: 'Invalid credentials'});
+            }
+
+
+        }
+    }, sqlQuery);
+
+
+});
+
 
 router.get('/checkLogin', function (req, res) {
 
@@ -246,7 +274,7 @@ router.get('/home/enroll', function (req, res) {
                 // req.session.gender = student.Gender;
                 // req.session.dob = student.DOB;
                 // req.session.profileStatus = 'completed';
-
+                console.log(student);
                 res.status(200).send({student:student});
             }
             else{
@@ -275,7 +303,10 @@ router.post('/home/enroll', function (req, res) {
                         PhoneNumber : req.body.phone,
                         Gender : req.body.gender,
                         City:req.body.city,
-                        DOB : req.body.dob.substring(0,10)
+                        DOB : req.body.dob.substring(0,10),
+                        ctype:req.body.ctype,
+                        dualcontrol:req.body.dualcontrol,
+                        ilicence:req.body.ilicence
                      })
                      .then(student => {
                         console.log("Student details updates successfully");
