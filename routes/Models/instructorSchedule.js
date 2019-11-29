@@ -1,12 +1,11 @@
 const mongoose=require('mongoose');
 const Instructor=new mongoose.Schema({
-
-    instructorID: {
+    iusername: {
         type: String,
         required: true
     },
     sdate: {
-        type: Date,
+        type: String,
         required: true
     },
     slot0810: {
