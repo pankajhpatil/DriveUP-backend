@@ -34,7 +34,6 @@ router.post('/home/plans', function (req, res) {
         instructorschedule.find({$and: [
             { sdate: { $gte: startDate } }, { sdate: { $lte: endDate}}
         ]},(err, data) => {
-        console.log(data);
 
         if(Array.isArray(data) && data.length==0){
             res.statusMessage = "No Instructors are Available";

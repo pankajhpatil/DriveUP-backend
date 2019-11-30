@@ -74,9 +74,6 @@ router.post('/updateIdetails', function (req, res, next) {
     // var user_id = req.file;
     // console.log(user_id);
     // console.log("INside /insert" +  "withoutbody" +req.body);
-    console.log(req.body);
-    console.log("full request " + req);
-    console.log(req);
 
     var sqlQuery = "UPDATE `dropboxmysql`.`user_data` SET `password` = '" + req.body.password + "',`firstname` = '" + req.body.firstname + "',`lastname` = '" + req.body.lastname + "',`email` = '" + req.body.email + "',`phone`= '" + req.body.phone + "',`modifieddate`=now()  WHERE (`username` = '" + req.body.username + "')";
 
