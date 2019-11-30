@@ -18,7 +18,6 @@ router.get('/getISchedule', function (req, res) {
 var name=req.session.username;
   
 instructorschedule.find({ iusername : name },(err, data) => {
-    console.log(data);
     res.statusMessage = "Fetch Complete";
     res.status(200).send({result: data});
 });
