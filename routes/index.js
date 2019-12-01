@@ -326,4 +326,27 @@ router.post('/home/enroll', function (req, res) {
         })
 });
 
+router.get('/home', function (req, res) {
+
+    let user=req.session.username;
+
+    Student.findOne({ Name: user })
+        .then(student => {
+        
+            if(student){
+                if(student.schedule.length == 0){
+                    res.statusMessage = "student profile found!";
+                }
+                else{
+                    res.statusMessage = "Schedule already present!";
+                }
+            }
+            else{
+                res.statusMessage = "No student profile found!";
+            }
+            res.status(200).send();
+    })
+    .catch(err=>console.log(err));
+});
+
 module.exports = router;

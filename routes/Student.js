@@ -39,16 +39,16 @@ router.post('/home/confirm', function (req, res) {
         .then(student => {
             
         if(student){
-            console.log(student);
-            Student.updateOne({_id:student._id}, {
-                schedule: req.body.selectedSchedules,
-                plansummary: req.body.planSummary
-            })
-            .then(student => {
-                console.log("Student details updates successfully");
+            
+            // Student.updateOne({_id:student._id}, {
+            //     schedule: req.body.selectedSchedules,
+            //     plansummary: req.body.planSummary
+            // })
+            // .then(student => {
+            //     console.log("Student details updates successfully");
                 
-            })
-            .catch(err=>console.log(err));
+            // })
+            // .catch(err=>console.log(err));
         }
     })
     .catch(err=>console.log(err));
@@ -86,28 +86,38 @@ router.post('/home/confirm', function (req, res) {
                 else if(element.slot == 'Slot7- 8pm-10pm' && item.slot2022 == 'Y'){
                     item.slot2022 = 'Booked_'+user;
                 }
-                console.log('item');
-                console.log(item);
-
-                instructorschedule.updateOne({_id:item._id}, {
-                    slot0810: item.slot0810,
-                    slot1012: item.slot1012,
-                    slot1214: item.slot1214,
-                    slot1416: item.slot1416,
-                    slot1618: item.slot1618,
-                    slot1820: item.slot1820,
-                    slot2022: item.slot2022
-                })
-                .then(student => {
-                    console.log("Insturctor details updates successfully");
-                })
-                .catch(err=>console.log(err));
+            
+            //     instructorschedule.updateOne({_id:item._id}, {
+            //         slot0810: item.slot0810,
+            //         slot1012: item.slot1012,
+            //         slot1214: item.slot1214,
+            //         slot1416: item.slot1416,
+            //         slot1618: item.slot1618,
+            //         slot1820: item.slot1820,
+            //         slot2022: item.slot2022
+            //     })
+            //     .then(student => {
+            //         console.log("Insturctor details updates successfully");
+            //     })
+            //     .catch(err=>console.log(err));
             }
 
         });
     });
 
     res.status(200).send();
+});
+
+
+router.get('/home/appointments', function (req, res) {
+
+    let user=req.session.username;
+
+    Student.findOne({ Name: user })
+        .then(student => {  
+            res.status(200).send({result: student});
+    })
+    .catch(err=>console.log(err));
 });
 
 module.exports = router;
