@@ -264,17 +264,6 @@ router.get('/home/enroll', function (req, res) {
             
             if(student){
                 console.log("Profile is already completed");
-
-                // data = {};
-                
-                // req.session.minor = student.Minor;
-                // req.session.address = student.Address;
-                // req.session.country = student.Country;
-                // req.session.phone = student.PhoneNumber;
-                // req.session.gender = student.Gender;
-                // req.session.dob = student.DOB;
-                // req.session.profileStatus = 'completed';
-                console.log(student);
                 res.status(200).send({student:student});
             }
             else{
