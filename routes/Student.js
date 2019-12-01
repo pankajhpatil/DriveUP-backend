@@ -40,15 +40,15 @@ router.post('/home/confirm', function (req, res) {
             
         if(student){
             
-            // Student.updateOne({_id:student._id}, {
-            //     schedule: req.body.selectedSchedules,
-            //     plansummary: req.body.planSummary
-            // })
-            // .then(student => {
-            //     console.log("Student details updates successfully");
+            Student.updateOne({_id:student._id}, {
+                schedule: req.body.selectedSchedules,
+                plansummary: req.body.planSummary
+            })
+            .then(student => {
+                console.log("Student details updates successfully");
                 
-            // })
-            // .catch(err=>console.log(err));
+            })
+            .catch(err=>console.log(err));
         }
     })
     .catch(err=>console.log(err));
@@ -87,19 +87,19 @@ router.post('/home/confirm', function (req, res) {
                     item.slot2022 = 'Booked_'+user;
                 }
             
-            //     instructorschedule.updateOne({_id:item._id}, {
-            //         slot0810: item.slot0810,
-            //         slot1012: item.slot1012,
-            //         slot1214: item.slot1214,
-            //         slot1416: item.slot1416,
-            //         slot1618: item.slot1618,
-            //         slot1820: item.slot1820,
-            //         slot2022: item.slot2022
-            //     })
-            //     .then(student => {
-            //         console.log("Insturctor details updates successfully");
-            //     })
-            //     .catch(err=>console.log(err));
+                instructorschedule.updateOne({_id:item._id}, {
+                    slot0810: item.slot0810,
+                    slot1012: item.slot1012,
+                    slot1214: item.slot1214,
+                    slot1416: item.slot1416,
+                    slot1618: item.slot1618,
+                    slot1820: item.slot1820,
+                    slot2022: item.slot2022
+                })
+                .then(student => {
+                    console.log("Insturctor details updates successfully");
+                })
+                .catch(err=>console.log(err));
             }
 
         });
