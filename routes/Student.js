@@ -97,7 +97,7 @@ router.post('/home/confirm', function (req, res) {
                     slot2022: item.slot2022
                 })
                 .then(student => {
-                    console.log("Insturctor details updates successfully");
+                    console.log("Instructor details updates successfully");
                 })
                 .catch(err=>console.log(err));
             }
