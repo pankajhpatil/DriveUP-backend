@@ -8,6 +8,7 @@ var upload = require('./routes/upload')
 var download = require('./routes/fetch')
 var index = require('./routes/index')
 var instructor = require('./routes/instructor')
+var payment = require('./routes/payment')
 var student = require('./routes/Student')
 
 var cookieParser = require('cookie-parser');
@@ -55,6 +56,7 @@ app.use('/download', download);
 app.use('/', index);
 app.use('/', student);
 app.use('/instructor', instructor);
+app.use('/payment', payment);
 app.use('/', student);
 
 app.listen(port);
