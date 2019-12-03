@@ -18,7 +18,6 @@ router.get('/getISchedule', function (req, res) {
 var name=req.session.username;
   
 instructorschedule.find({ iusername : name },(err, data) => {
-    console.log(data);
     res.statusMessage = "Fetch Complete";
     res.status(200).send({result: data});
 });
@@ -75,9 +74,6 @@ router.post('/updateIdetails', function (req, res, next) {
     // var user_id = req.file;
     // console.log(user_id);
     // console.log("INside /insert" +  "withoutbody" +req.body);
-    console.log(req.body);
-    console.log("full request " + req);
-    console.log(req);
 
     var sqlQuery = "UPDATE `dropboxmysql`.`user_data` SET `password` = '" + req.body.password + "',`firstname` = '" + req.body.firstname + "',`lastname` = '" + req.body.lastname + "',`email` = '" + req.body.email + "',`phone`= '" + req.body.phone + "',`modifieddate`=now()  WHERE (`username` = '" + req.body.username + "')";
 

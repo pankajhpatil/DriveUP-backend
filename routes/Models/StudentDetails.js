@@ -45,6 +45,14 @@ const StudentSchema=new mongoose.Schema({
     ilicence: {
         type: String,
         required: false
+    },
+    schedule : {
+        type: Array,
+        required: false
+    },
+    plansummary : {
+        type : {},
+        required: false
     }
     
 });
