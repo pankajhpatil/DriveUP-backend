@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const instructorschedule= require('./models/instructorschedule');
 const Student = require('./models/StudentDetails');
+const Resource = require('./Models/Resources');
 
 router.post('/home/plans', function (req, res) {
     let startDate=req.body.fromdate;
@@ -118,6 +119,32 @@ router.get('/home/appointments', function (req, res) {
             res.status(200).send({result: student});
     })
     .catch(err=>console.log(err));
+});
+
+router.get('/home/resources', function (req, res) {
+
+    Resource.find()
+        .then(resource => { 
+            res.status(200).send({result: resource});
+    })
+    .catch(err=>console.log(err));
+
+    // const resource = new Resource({
+
+    //     index: '1',
+    //     desc: 'The California Department of Motor Vehicles (DMV) tests and licenses drivers, maintains driving records, registers and issues titles to vehicles and vessels, investigates auto and identity related fraud, issues disabled placards, licenses vehicle dealers, salespersons, dismantlers, driving and traffic violator schools, and issues permits to commercial truckers.',
+    //     file: 'https://www.dmv.ca.gov/web/eng_pdf/dl600.pdf',
+    //     videoId: 'TcFGlHUbKgM',
+    //     tags: ['Introduction - Making a Bad Decision','Basic Driver License Information','Save Time! Go Online!']
+    // });
+
+    // resource.save()
+    // .then(resource => {
+    //     console.log("Resource details saved successfully");
+    //     res.status(200).send();
+    // })
+    // .catch(err=>console.log(err));
+
 });
 
 module.exports = router;
