@@ -5,7 +5,7 @@ const multer = require("multer");
 const config = require("../config");
 var mysql = require('./db/sql');
 var moment = require('moment');
-const instructorschedule= require('./Models/instructorSchedule');
+const instructorschedule= require('./models/instructorSchedule');
 
 
 

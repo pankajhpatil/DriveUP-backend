@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const instructorschedule= require('./Models/instructorSchedule');
-const Student = require('./Models/StudentDetails');
-const Resource = require('./Models/Resources');
+const instructorschedule= require('./models/instructorSchedule');
+const Student = require('./models/StudentDetails');
+const Resource = require('./models/Resources');
 
 router.post('/home/plans', function (req, res) {
     let startDate=req.body.fromdate;

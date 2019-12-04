@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
 //DB config
-const db=require('./routes/Models/keys').MongoURI;
+const db=require('./routes/models/keys').MongoURI;
 
 //connect to Mongo
 mongoose.connect(db,{ useNewUrlParser: true})
