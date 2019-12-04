@@ -1,5 +1,4 @@
 const mongoose=require('mongoose');
-// import mongoose = require('')
 
 const ResourceSchema=new mongoose.Schema({
     index: {
