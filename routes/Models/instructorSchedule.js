@@ -1,4 +1,4 @@
-const mongoose=require('./node_modules/mongoose');
+const mongoose=require('mongoose');
 const Instructor=new mongoose.Schema({
     iusername: {
         type: String,
