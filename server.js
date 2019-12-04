@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
 //DB config
-const db=require('./routes/models/keys').MongoURI;
+const db=require('./routes/Models/keys').MongoURI;
 
 //connect to Mongo
 mongoose.connect(db,{ useNewUrlParser: true})
@@ -36,7 +36,7 @@ mongoose.connect(db,{ useNewUrlParser: true})
 
 app.use(cors(
     {
-        origin: ['http://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://localhost:3000','http://localhost:3000', 'http://10.0.0.137:3000', 'http://10.0.0.188:3000', 'https://10.0.0.137:3000', 'https://10.0.0.188:3000','http://www.pankajhpatil.com','https://www.pankajhpatil.com','*'],
+        origin: ['http://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://localhost:3000','http://localhost:3000', 'http://10.0.0.137:3000', 'http://10.0.0.188:3000', 'https://10.0.0.137:3000', 'https://10.0.0.188:3000','http://www.pankajhpatil.com','https://www.pankajhpatil.com','http://18.217.10.228:3000','https://18.217.10.228:3000'],
         credentials: true,
     }
 ));

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const instructorschedule= require('./models/instructorschedule');
-const Student = require('./models/StudentDetails');
+const instructorschedule= require('./Models/instructorSchedule');
+const Student = require('./Models/StudentDetails');
 const Resource = require('./Models/Resources');
 
 router.post('/home/plans', function (req, res) {

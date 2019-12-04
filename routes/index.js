@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const config = require("../config");
 var mysql = require('./db/sql');
-const Student = require('./models/StudentDetails');
+const Student = require('./Models/StudentDetails');
 
 
 router.post('/login', function (req, res) {
