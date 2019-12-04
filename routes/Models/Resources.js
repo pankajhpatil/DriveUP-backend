@@ -1,4 +1,5 @@
-const mongoose=require('./node_modules/mongoose');
+const mongoose=require('mongoose');
+// import mongoose = require('')
 
 const ResourceSchema=new mongoose.Schema({
     index: {

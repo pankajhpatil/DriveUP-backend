@@ -1,5 +1,4 @@
-const mongoose=require('./node_modules/mongoose');
-
+const mongoose=require('mongoose');
 const StudentSchema=new mongoose.Schema({
 
     Name: {
