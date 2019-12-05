@@ -123,8 +123,6 @@ router.get('/home/appointments', function (req, res) {
 router.post('/home/userdata', function (req, res) {
     
     let user=req.body.username;
-    console.log("/home/userdata");
-    console.log(user);
     Student.findOne({ Name: user })
         .then(student => {  
             res.status(200).send({result: student});
