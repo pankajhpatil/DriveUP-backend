@@ -1,12 +1,12 @@
 #node image
 FROM node:latest
 
-RUN mkdir -p /usr/src/backend
+RUN mkdir -p /usr/src/app
 #set working directory
-WORKDIR /usr/src/backend
+WORKDIR /usr/src/app
 
 #Copy both package.json and package-lock.json
-COPY package.json /usr/src/backend
+COPY package.json /usr/src/app
 
 #Install dependencies
 RUN npm install
