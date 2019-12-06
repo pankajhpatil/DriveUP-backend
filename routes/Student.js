@@ -25,7 +25,6 @@ router.post('/home/plans', function (req, res) {
         else{
             res.statusMessage = "Instructors are Available";
 
-            //manish
             Student.find()
             .then(individualData => { 
 
