@@ -3,6 +3,12 @@ const Instructor=new mongoose.Schema({
     iusername: {
         type: String,
         required: true
+    },userFullName: {
+        type: String,
+        required: false
+    },city: {
+        type: String,
+        required: false
     },
     sdate: {
         type: String,

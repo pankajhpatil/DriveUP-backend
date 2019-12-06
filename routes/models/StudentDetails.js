@@ -52,8 +52,10 @@ const StudentSchema=new mongoose.Schema({
     plansummary : {
         type : {},
         required: false
-    }
-    
+    },UserFullName: {
+        type: String,
+        required: false
+    }    
 });
 
 const Student=mongoose.model('Student',StudentSchema);

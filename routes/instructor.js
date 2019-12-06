@@ -6,18 +6,13 @@ const config = require("../config");
 var mysql = require('./db/sql');
 var moment = require('moment');
 const instructorschedule= require('./models/instructorSchedule');
+const Student = require('./models/StudentDetails');
 
-
-
-var storage = multer.memoryStorage();
-var upload = multer({storage: storage, limits: {fileSize: 10 * 1024 * 1024}});
-
-
-router.get('/getISchedule', function (req, res) {
+router.get('/getISchedule', async function (req, res) {
 //instructorschedules
 var name=req.session.username;
-  
-instructorschedule.find({ iusername : name },(err, data) => {
+console.log("Fetching schedules");  
+await instructorschedule.find({ iusername : name },(err, data) => {
     res.statusMessage = "Fetch Complete";
     res.status(200).send({result: data});
 });
@@ -26,48 +21,95 @@ instructorschedule.find({ iusername : name },(err, data) => {
 
 
 // GET to upload
-router.post('/createinstructorSchedule', function (req, res) {
+router.post('/createinstructorSchedule', async function (req, res) {
     console.log("insert instructor schedules!",req.session.username);
     var username=req.session.username;
-    //username="test22";
-    var now = moment(req.body.fromdate);
-    var later = moment(req.body.todate);
-//console.log(req.body.fromdate);
-//console.log(now);
-//console.log(req.body.slot0810);
-//console.log(later);
-var cnt=(later.diff(now,"days")+1);
+    var instructorcity="";
+    var userFullName=req.session.userFullName;
 
-    for(var i=0; i<=cnt; i++){
-        //console.log(now.format("DD-MM-YYYY"));
-          //mongo
-     const ISchedule = new instructorschedule({
-        iusername : username,
-        sdate : now.format("DD-MMM-YYYY"),
-        slot0810:req.body.slot0810,
-        slot1012:req.body.slot1012,
-        slot1214:req.body.slot1214,
-        slot1416:req.body.slot1416,
-        slot1618:req.body.slot1618,
-        slot1820:req.body.slot1820,
-        slot2022:req.body.slot2022
-      });
-      //console.log('%%%%%%%');
-      //console.log(ISchedule);
-      //check if already exisits
-      ISchedule.save()
-      .then(user => {
-          console.log('Schedule registered in Mongo');
-      })
-      .catch(err=>console.log(err));
-     //console.log(now.format("DD-MMM-YYYY"));
+
+     await Student.findOne({ Name:username })
+        .then(student => {
+            
+            if(student){
+                req.session.city = student.City;
+                instructorcity = student.City;
+
+                console.log(req.session.city);
+            }
+            else{
+                instructorcity = "NA";
+
+            }
+            
+        });
+
+
+var now = moment(req.body.fromdate);
+var later = moment(req.body.todate);
+var cnt=(later.diff(now,"days")+1);
+var dateArray = [];
+for(var i=0; i<cnt; i++){
+    dateArray.push(now.format("DD-MMM-YYYY"));
     now = moment(now, "DD-MM-YYYY").add(1, 'days');
-    }
+
+}
+async function init(){
+    console.log(1)
+    await sleep(1000)
+    console.log(2)
+ }
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
+
+dateArray.forEach(async function(value){
+        console.log(value);
+        console.log(instructorcity);
+        await init();
+
+        await instructorschedule.findOne({$and:[{ iusername : username} ,{sdate : now.format("DD-MMM-YYYY")}]})
+        .then(ischedule => {
+            
+            if(ischedule){
+                console.log("Schedule present for date"+value);
+            }else{
+            
+                const ISchedule =  new instructorschedule({
+                    iusername : username,
+                    sdate : value,
+                    UserFullName:userFullName,
+                    city:instructorcity,
+                    slot0810:req.body.slot0810,
+                    slot1012:req.body.slot1012,
+                    slot1214:req.body.slot1214,
+                    slot1416:req.body.slot1416,
+                    slot1618:req.body.slot1618,
+                    slot1820:req.body.slot1820,
+                    slot2022:req.body.slot2022
+                  });
+                  
+                  ISchedule.save()
+                  .then(user => {
+                      console.log('Schedule created!');
+
+                  })
+                  .catch(err=>{
+                      console.log(err);
+                      //Next Day
+                    });
+            }
+        })
+        //Next Day
+       // now = moment(now, "DD-MM-YYYY").add(1, 'days');
+    });
    
 
       //{"_id":{"$oid":"5ddf7d6e1c9d440000467c4e"},"instructorID":"1","sdate":{"$date":{"$numberLong":"1573459200000"}},"slot0810":"Y","slot1012":"Y","slot1214":"Y","slot1416":"Y","slot1618":"Y","slot1820":"Y","slot2022":"Y"}
-      res.statusMessage = "Schedule Created";      
-        res.status(200).send({message: "Got result from GET"});
+    res.statusMessage = "Schedule Created";      
+    res.status(200).send({message: "Got result from GET"});
 });
 
 router.post('/updateIdetails', function (req, res, next) {

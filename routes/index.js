@@ -26,6 +26,7 @@ router.post('/login', function (req, res) {
                 req.session.lastName = results[0].lastname;
                 req.session.user_id = results[0].user_id;
                 req.session.usertype = results[0].usertype;
+                req.session.userFullName = results[0].firstname+" "+results[0].lastname;
                 // res.status(200);
                 res.status(200).send({result: results});
             }
@@ -230,7 +231,8 @@ router.post('/login/OAuth', function (req, res) {
                                     req.session.firstName = resultsAgain[0].firstname;
                                     req.session.lastName = resultsAgain[0].lastname;
                                     req.session.user_id = resultsAgain[0].user_id;
-
+                                    req.session.usertype = results[0].usertype;
+                                    req.session.userFullName = results[0].firstname+" "+results[0].lastname;
                                     res.statusMessage = "Insert Complete";
                                     res.status(200).send({result: resultsAgain});
                                 }
@@ -246,6 +248,8 @@ router.post('/login/OAuth', function (req, res) {
                 req.session.username = req.body.username;
                 req.session.firstName = req.body.firstname;
                 req.session.lastName = req.body.lastname;
+                req.session.usertype = results[0].usertype;
+                req.session.userFullName = results[0].firstname+" "+results[0].lastname;
                 req.session.user_id = results[0].user_id;
                 res.status(200).send({result: results}); 
             }                   
@@ -295,7 +299,8 @@ router.post('/home/enroll', function (req, res) {
                         DOB : req.body.dob.substring(0,10),
                         ctype:req.body.ctype,
                         dualcontrol:req.body.dualcontrol,
-                        ilicence:req.body.ilicence
+                        ilicence:req.body.ilicence,
+                        UserFullName:req.session.userFullName
                      })
                      .then(student => {
                         console.log("Student details updates successfully");
@@ -313,7 +318,8 @@ router.post('/home/enroll', function (req, res) {
                     PhoneNumber : req.body.phone,
                     Gender : req.body.gender,
                     City:req.body.city,
-                    DOB : req.body.dob.substring(0,10)
+                    DOB : req.body.dob.substring(0,10),
+                    UserFullName:req.session.userFullName
                 });
 
                 newStudent.save()
