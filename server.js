@@ -37,7 +37,7 @@ mongoose.connect(db,{ useNewUrlParser: true})
 
 app.use(cors(
     {
-        origin: ['http://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://localhost:3000','http://localhost:3000', 'http://10.0.0.137:3000', 'http://10.0.0.188:3000', 'https://10.0.0.137:3000', 'https://10.0.0.188:3000','http://www.pankajhpatil.com','https://www.pankajhpatil.com','http://3.134.178.11:3000','https://13.134.178.11:3000','http://18.217.10.228:3000','https://18.217.10.228:3000'],
+        origin: ['http://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://dropboxapp-ui.cmibwegni2.us-east-2.elasticbeanstalk.com','https://localhost:3000','http://localhost:3000', 'http://10.0.0.137:3000', 'http://10.0.0.188:3000', 'https://10.0.0.137:3000', 'https://10.0.0.188:3000','http://driveup.pankajhpatil.com','https://driveup.pankajhpatil.com','http://3.134.178.11:3000','https://13.134.178.11:3000','http://18.217.10.228:3000','https://18.217.10.228:3000'],
         credentials: true,
     }
 ));
