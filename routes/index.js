@@ -204,9 +204,9 @@ router.post('/login/OAuth', function (req, res) {
             // New User
             if(results.length === 0) {
                 console.log("user not present continue to insert");
-                var insertQuery = "INSERT INTO `user_data` ( `username`, `password`, `firstname`, `lastname`,`email`,`modifieddate`,`phone`) VALUES ('" + 
+                var insertQuery = "INSERT INTO `user_data` ( `username`, `password`, `firstname`, `lastname`,`email`,`modifieddate`,`phone`,`usertype`) VALUES ('" + 
                                         req.body.username + "', '" + req.body.password + "', '" + req.body.firstname + "', '" + 
-                                        req.body.lastname + "', '" + req.body.email + "', " + "now()" + ", '" + req.body.phone + "')";
+                                        req.body.lastname + "', '" + req.body.email + "', " + "now()" + ", '" + req.body.phone + "','student')";
                 mysql.fetchData(function (err, insertResults) {
                     console.log('Results inside:: ');
                     console.log(insertResults.length);
