@@ -9,6 +9,7 @@ var download = require('./routes/fetch')
 var index = require('./routes/index')
 var instructor = require('./routes/instructor')
 var student = require('./routes/Student')
+var payment = require('./routes/payment')
 
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
@@ -56,6 +57,7 @@ app.use('/', index);
 app.use('/', student);
 app.use('/instructor', instructor);
 app.use('/', student);
+app.use('/payment', payment);
 
 app.listen(port);
 
