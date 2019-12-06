@@ -24,8 +24,21 @@ router.post('/home/plans', function (req, res) {
         }
         else{
             res.statusMessage = "Instructors are Available";
+
+            //manish
+            Student.find()
+            .then(individualData => { 
+
+                let output = {};
+                output.individualData = individualData;
+                output.data = data
+                res.status(200).send({result: output});
+        
+            })
+            .catch(err=>console.log(err));
+
         }
-        res.status(200).send({result: data});
+       
     });
 
 });
@@ -137,21 +150,29 @@ router.get('/home/resources', function (req, res) {
     })
     .catch(err=>console.log(err));
 
-    // const resource = new Resource({
+});
 
-    //     index: '1',
-    //     desc: 'The California Department of Motor Vehicles (DMV) tests and licenses drivers, maintains driving records, registers and issues titles to vehicles and vessels, investigates auto and identity related fraud, issues disabled placards, licenses vehicle dealers, salespersons, dismantlers, driving and traffic violator schools, and issues permits to commercial truckers.',
-    //     file: 'https://www.dmv.ca.gov/web/eng_pdf/dl600.pdf',
-    //     videoId: 'TcFGlHUbKgM',
-    //     tags: ['Introduction - Making a Bad Decision','Basic Driver License Information','Save Time! Go Online!']
-    // });
+router.post('/home/appointments', function (req, res) {
 
-    // resource.save()
-    // .then(resource => {
-    //     console.log("Resource details saved successfully");
-    //     res.status(200).send();
-    // })
-    // .catch(err=>console.log(err));
+    let rating = req.body.rating;
+    let name = req.body.instructor;
+    Student.findOne({ Name : name })
+    .then(instructor => { 
+
+        if(instructor){
+
+            Student.updateOne({_id:instructor._id}, {
+                rating: rating
+            })
+            .then(student => {
+                console.log(student);
+                console.log("rating details updates successfully");
+                res.status(200).send();
+            })
+            .catch(err=>console.log(err));
+        }
+    })
+    .catch(err=>console.log(err));
 
 });
 

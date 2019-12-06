@@ -55,6 +55,10 @@ const StudentSchema=new mongoose.Schema({
     },UserFullName: {
         type: String,
         required: false
+    },
+    rating: {
+        type: String,
+        required: false
     }    
 });
 
