@@ -53,7 +53,7 @@ router.post("/checkout", async (req, res) => {
     res.status(200).send({result: charge});
   
   } catch (error) {
-    console.error("Error:", error);
+    console.error(error);
     status = "failure";
     res.status(403);
     res.send({msg: 'Something Went Worng'});
