@@ -11,11 +11,19 @@ const Student = require('./models/StudentDetails');
 router.get('/getISchedule', async function (req, res) {
 //instructorschedules
 var name=req.session.username;
-console.log("Fetching schedules");  
+console.log("Fetching schedules"); 
+if(name==='admin'){
+
+    await instructorschedule.find((err, data) => {
+        res.statusMessage = "Fetch Complete";
+        res.status(200).send({result: data});
+    });
+} else{
 await instructorschedule.find({ iusername : name },(err, data) => {
     res.statusMessage = "Fetch Complete";
     res.status(200).send({result: data});
 });
+}
 
 });
 
