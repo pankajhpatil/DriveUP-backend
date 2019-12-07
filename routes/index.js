@@ -10,8 +10,8 @@ router.post('/login', function (req, res) {
     // console.log("INside /getuser" + "withoutbody" + req.body + res.body + req.user_id);
     // console.log(req.body);
 
-    //var sqlQuery = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.body.username + "') and (`password` = '" + req.body.password + "')";
-    var sqlQuery ="select `user_id`, `username`, `password`, `firstname`, CONCAT(lastname, '_CICD') as `lastname`, `email`, `modifieddate`, `phone`, `usertype` from dropboxmysql.user_data WHERE (`username` = '" + req.body.username + "') and (`password` = '" + req.body.password + "')";
+    var sqlQuery = "select * from dropboxmysql.user_data d WHERE (`username` = '" + req.body.username + "') and (`password` = '" + req.body.password + "')";
+   // var sqlQuery ="select `user_id`, `username`, `password`, `firstname`, CONCAT(lastname, '_CICD') as `lastname`, `email`, `modifieddate`, `phone`, `usertype` from dropboxmysql.user_data WHERE (`username` = '" + req.body.username + "') and (`password` = '" + req.body.password + "')";
 
     // console.log(sqlQuery);
     
