@@ -1,4 +1,4 @@
-Welcome to the AWS CodeStar sample web application
+Welcome to the AWS CodeStar sample web application update
 ==================================================
 ==================================================
 This sample code helps get you started with a simple Express web application
