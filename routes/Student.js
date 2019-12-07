@@ -126,11 +126,25 @@ router.get('/home/appointments', function (req, res) {
 
     let user=req.session.username;
 
-    Student.findOne({ Name: user })
+    if(user == 'admin'){
+
+        Student.find()
         .then(student => {  
             res.status(200).send({result: student});
-    })
-    .catch(err=>console.log(err));
+        })
+        .catch(err=>console.log(err));
+
+    }
+    else{
+
+        Student.findOne({ Name: user })
+        .then(student => {  
+            res.status(200).send({result: student});
+        })
+        .catch(err=>console.log(err));
+
+    }
+    
 });
 router.post('/home/userdata', function (req, res) {
     
