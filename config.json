@@ -4,6 +4,11 @@
   "AWS_SECRET_ACCESS_KEY":"zXjU3CChq87FOe/nfdfsRRhZx8HT1zTgdg0Vwvuv",
   "AWS_REGION":"us-west-1",
   "AWS_BUCKET_NAME":"cmpe281dropboxfiles",
-  "MongoURI": "mongodb+srv://manishDb:ty2TOCRijaDwJhUY@emaily-2r7gc.mongodb.net/test?retryWrites=true&w=majority"
+  "MongoURI": "mongodb+srv://manishDb:ty2TOCRijaDwJhUY@emaily-2r7gc.mongodb.net/test?retryWrites=true&w=majority",
+  "host"    : "dropboxmysql.ccrkoda0knep.us-east-2.rds.amazonaws.com",
+  "user"    : "admin",
+  "password" : "manunited",
+  "database" : "dropboxmysql",
+  "port"	 : "3306"
 
 }

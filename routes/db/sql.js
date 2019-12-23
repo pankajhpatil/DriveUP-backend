@@ -1,13 +1,13 @@
 var mysql = require('mysql');
-
+const config = require("../../config");
 //Put your mysql configuration settings - user, password, database and port
 function getConnection(){
     var connection = mysql.createConnection({
-        host     : 'dropboxmysql.ccrkoda0knep.us-east-2.rds.amazonaws.com',
-        user     : 'admin',
-        password : 'manunited',
-        database : 'dropboxmysql',
-        port	 : 3306
+        host     : config.host,
+        user     : config.user,
+        password : config.password,
+        database : config.database,
+        port	 : config.port
     });
     return connection;
 }
